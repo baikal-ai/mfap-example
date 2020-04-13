@@ -1,4 +1,3 @@
-***
 
 *  **Montreal-Forced-Aligner**
 
