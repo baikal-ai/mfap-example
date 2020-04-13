@@ -1,0 +1,47 @@
+
+numberOfPhonemes = Get number of intervals: 2
+appendInfoLine: "There are ", numberOfPhonemes, " intervals."
+
+select Sound 'thisSound$'
+To Formant (burg)... 0 5 5000 0.025 50
+
+writeFileLine: "'outputPath$'", "time, phoneme ,F1_q1, F1_q2, F1_q3, F2_q1, F2_q2,F2_q3, F3_q1, F3_q2, F3_q3"
+
+for thisInterval from 1 to numberOfPhonemes
+    select TextGrid 'thisTextGrid$'
+    thisPhoneme$ = Get label of interval: 2, thisInterval
+
+    thisPhonemeStartTime = Get start point: 2, thisInterval
+    thisPhonemeEndTime   = Get end point:   2, thisInterval
+    duration = thisPhonemeEndTime - thisPhonemeStartTime
+    quarterpoint = thisPhonemeStartTime + duration/4
+    midpoint = thisPhonemeStartTime + duration/2
+    quarter3point = thisPhonemeStartTime + duration/4
+
+    select Formant 'thisSound$'
+    f1_q1 = Get value at time... 1 quarterpoint Hertz Linear
+    f1_q2 = Get value at time... 1 midpoint Hertz Linear
+    f1_q3 = Get value at time... 1 quarter3point Hertz Linear
+    f2_q1 = Get value at time... 2 quarterpoint Hertz Linear
+    f2_q2 = Get value at time... 2 midpoint Hertz Linear
+    f2_q3 = Get value at time... 2 quarter3point Hertz Linear
+    f3_q1 = Get value at time... 3 quarterpoint Hertz Linear
+    f3_q2 = Get value at time... 3 midpoint Hertz Linear
+    f3_q3 = Get value at time... 3 quarter3point Hertz Linear
+
+    appendFileLine: "'outputPath$'", 
+                    ...duration, ",",
+                    ...thisPhoneme$, ",",
+                    ...f1_q1, ",", 
+                    ...f1_q2, ",",
+                    ...f1_q3, ",",
+                    ...f2_q1, ",", 
+                    ...f2_q2, ",", 
+                    ...f2_q3, ",", 
+                    ...f3_q1, ",", 
+                    ...f3_q2, ",", 
+                    ...f3_q3 
+
+endfor
+
+appendInfoLine: newline$, newline$, "All Formants are extracted without error."
